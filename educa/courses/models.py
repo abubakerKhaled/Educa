@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from .fields import OrderField
 
 class Subject(models.Model):
     title = models.CharField(max_length=200)
@@ -45,9 +46,13 @@ class Module(models.Model):
     )
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    order = OrderField(blank=True, for_fields=['course'])
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
-        return self.title if len(self.title) < 51 else f'{self.title[:51]}...'
+        return f'{self.order}. {self.title}' if len(self.title) < 51 else f'{self.order}. {self.title[:51]}...'
 
 class Content(models.Model):
     module = models.ForeignKey(
@@ -64,6 +69,10 @@ class Content(models.Model):
     )
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
+    order = OrderField(blank=True, for_fields=['module'])
+
+    class Meta:
+        ordering = ['order']
 
 class ItemBase(models.Model):
     owner = models.ForeignKey(
