@@ -28,4 +28,14 @@ urlpatterns = [
         views.CourseModuleUpdateView.as_view(),
         name='course-module-update'
     ),
+    path(
+        'module/<int:module_id>/content/<model_name>/create/',
+        views.ContentCreateUpdateView.as_view(),
+        name='module-content-create'
+    ),
+    path(
+        'module/<int:module_id>/content/<model_name>/<id>/',
+        views.ContentCreateUpdateView.as_view(),
+        name='module-content-update'
+    ),
 ]
