@@ -21,6 +21,11 @@ class Course(models.Model):
         related_name='courses_created',
         on_delete=models.CASCADE
     )
+    students = models.ManyToManyField(
+        User,
+        related_name='courses_joined',
+        blank=True
+    )
     subject = models.ForeignKey(
         Subject,
         related_name='courses',
@@ -30,6 +35,7 @@ class Course(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)  # ✅ New field to track course status
 
     class Meta:
         ordering = ['-created']
